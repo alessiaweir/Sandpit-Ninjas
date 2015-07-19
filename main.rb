@@ -8,20 +8,6 @@ class MyApp < Sinatra::Base
     send_file File.join('public', '/index.html')
   end
 
-  get '/test_api' do
-    content_type :json
-    { :key1 => "dope", :key2 => 'value2' }.to_json
-  end
-
-  get '/get_locs' do
-    content_type :json
-
-    locs = Location.uniq.pluck(:name)
-    age = Age.uniq.pluck(:name)
-
-    {:locations => locs, :age => age}.to_json
-  end
-
   get '/get_locs' do
     content_type :json
 
@@ -32,6 +18,8 @@ class MyApp < Sinatra::Base
   end
 
   post '/post_user_info' do
+    content_type :json
+
     json = JSON.parse(request.body.read)
     
     location = Location.where(name: json['loc'])
@@ -39,44 +27,12 @@ class MyApp < Sinatra::Base
     crimes = Crime.where(gender: json['gen'], location: location, age: age)
 
     result = []
-    top_six = []
 
-    offs = Offence.all
+    top_six = get_top_six(crimes)
 
-    offs.each do |off|
-      top_six << {id: off.id ,offence: off.face_name, long_name: off.name, total: crimes.where(offence: off).count}
-    end
-    top_six = top_six.take(6).sort { |x,y| y[:total] <=> x[:total] };
+    sub_offs = get_sub_offinces(top_six)
 
-    samples = top_six.sample(2)
-
-    gen_off = samples.first
-
-    puts gen_off
-    gen_crime = Crime.where(offence_id: gen_off[:id])
-    puts "past" 
-
-    gender_pick = {offence: gen_off[:offence], offence_long_name: gen_off[:long_name], male: gen_crime.where(gender: "Male").count, female: gen_crime.where(gender: "Female").count}
-
-    time_comp = samples.last
-
-    puts time_comp
-
-    time_crime = Crime.where(offence_id: time_comp[:id])
-
-    temp = []
-
-    Crime.uniq.pluck(:year).each do |year|
-      temp << {year: year, total: time_crime.where(year: year).count}
-    end
-
-    temp = temp.sort { |x,y| x[:year] <=> y[:year] };
-
-    time_crime_result = {offence: time_comp[:offence], offence_long_name: time_comp[:long_name], data: temp}
-
-    result = {}
-
-    {:crimes => top_six, :gender => gender_pick, time_crime: time_crime_result}.to_json
+    {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp])}.to_json
   end
 
   # look at fixing this now
@@ -85,4 +41,54 @@ class MyApp < Sinatra::Base
   #   halt 404, { error: 'URL not found' }.to_json
   # end
 
-end #end
+  def get_top_six(crimes)
+    offs = Offence.all
+
+    top_six = []
+
+    offs.each do |off|
+      top_six << {id: off.id ,offence: off.face_name, long_name: off.name, total: crimes.where(offence: off).count}
+    end
+    top_six.take(6).sort { |x,y| y[:total] <=> x[:total] };
+  end
+
+  def gen_crime(gen_off)
+    gen_crime = Crime.where(offence_id: gen_off[:id])
+
+    {offence: gen_off[:offence], offence_long_name: gen_off[:long_name], male: gen_crime.where(gender: "Male").count, female: gen_crime.where(gender: "Female").count}
+  end
+
+  def time_crime(time_comp)
+
+    time_data = []
+
+    Crime.uniq.pluck(:year).each do |year|
+      time_data << {year: year, total: Crime.where(offence_id: time_comp[:id]).where(year: year).count}
+    end
+
+    {offence: time_comp[:offence], offence_long_name: time_comp[:long_name], data: time_data.sort{ |x,y| x[:year] <=> y[:year] }}
+
+  end
+
+  def get_sub_offinces(offences)
+    shuffled = offences.shuffle
+    off_hash = {}
+    keys = [:gen_off, :time_comp]
+    subs = {}
+
+    keys.each do |sim|
+      shuffled.each do |off|
+        if off[:total] != 0
+          shuffled.delete(off)
+          subs[sim] = off 
+          break
+        end
+      end
+    end
+
+    subs
+
+  end
+
+
+end
