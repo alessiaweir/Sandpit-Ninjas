@@ -32,7 +32,7 @@ class MyApp < Sinatra::Base
 
     sub_offs = get_sub_offinces(top_six)
 
-    {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp])}.to_json
+    {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off])}.to_json
   end
 
   # look at fixing this now
@@ -70,10 +70,25 @@ class MyApp < Sinatra::Base
 
   end
 
+  def age_crime(age_off)
+
+    age_crime = Crime.where(offence_id: age_off[:id])
+    age_groups = Age.all
+
+    data = []
+
+    age_groups.each do |group|
+      data << {age: group[:name], male: age_crime.where(age_id: group[:id], gender: "Male").count, female: age_crime.where(age_id: group[:id], gender: "Female").count}
+    end
+
+    {offence: age_off[:offence], offence_long_name: age_off[:long_name], data: data.sort{ |x,y| x[:age] <=> y[:age]} }
+
+  end
+
   def get_sub_offinces(offences)
     shuffled = offences.shuffle
     off_hash = {}
-    keys = [:gen_off, :time_comp]
+    keys = [:gen_off, :time_comp, :age_off]
     subs = {}
 
     keys.each do |sim|
