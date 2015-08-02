@@ -32,7 +32,7 @@ class MyApp < Sinatra::Base
 
     sub_offs = get_sub_offinces(top_six)
 
-    {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off])}.to_json
+    {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off]), district_crime: district_crime(sub_offs[:district_off])}.to_json
   end
 
   # look at fixing this now
@@ -47,7 +47,7 @@ class MyApp < Sinatra::Base
     top_six = []
 
     offs.each do |off|
-      top_six << {id: off.id ,offence: off.face_name, long_name: off.name, total: crimes.where(offence: off).count}
+      top_six << {id: off.id ,offence: off.face_name, long_name: off.name, location: {name: crimes.first.location.name, id: crimes.first.location.id}, total: crimes.where(offence: off).count}
     end
     top_six.take(6).sort { |x,y| y[:total] <=> x[:total] };
   end
@@ -72,23 +72,68 @@ class MyApp < Sinatra::Base
 
   def age_crime(age_off)
 
-    age_crime = Crime.where(offence_id: age_off[:id])
+    age_crime = Crime.where(offence_id: age_off[:id], location_id: age_off[:location][:id])
     age_groups = Age.all
 
     data = []
+    your_district = {gender: "Male", total: 0, age: "0 to 9"}
 
     age_groups.each do |group|
-      data << {age: group[:name], male: age_crime.where(age_id: group[:id], gender: "Male").count, female: age_crime.where(age_id: group[:id], gender: "Female").count}
+      male_count = age_crime.where(age_id: group[:id], gender: "Male").count
+      female_count = age_crime.where(age_id: group[:id], gender: "Female").count
+      gender = "Male"
+      age = group[:name]
+      num = male_count
+
+      if (num < female_count)
+        num = female_count
+        gender = "Female"
+      end
+
+      if (num > your_district[:total])
+        your_district[:total] = num
+        your_district[:gender] = gender
+        your_district[:age] = age
+      end
+
+      data << {age: group[:name], male: male_count, female: female_count}
     end
 
-    {offence: age_off[:offence], offence_long_name: age_off[:long_name], data: data.sort{ |x,y| x[:age] <=> y[:age]} }
+    {offence: age_off[:offence], offence_long_name: age_off[:long_name], most_likey: your_district, data: data.sort{ |x,y| x[:age] <=> y[:age]} }
+
+  end
+
+  def district_crime(district_off)
+    age_crime = Crime.where(offence_id: district_off[:id])
+    locs = Location.all
+    your_loc = {location: district_off[:location][:name], level: ""}
+    data = []
+    total_crime = 0
+
+    locs.each do |loc|
+      total_loc_crime = age_crime.where(location_id: loc.id).count
+      data << {location: loc.name, total: total_loc_crime}
+      total_crime = total_crime + total_loc_crime
+    end
+
+    data2 = data.sort{ |x,y| y[:total] <=> x[:total]}
+    crime_levels = ["highest","secound highest","third highest", "above average" ,"above average","average","average","below average","below average","third lowest", "secound lowest", "lowest"]
+
+    data2.each.with_index do |dats, index|
+      if (dats[:location] == your_loc[:location])
+        your_loc[:level] = crime_levels[index]
+        break
+      end
+    end
+
+    {offence: district_off[:offence], offence_long_name: district_off[:long_name], your_loc: your_loc,data: data.sort{ |x,y| x[:location] <=> y[:location]} }
 
   end
 
   def get_sub_offinces(offences)
     shuffled = offences.shuffle
     off_hash = {}
-    keys = [:gen_off, :time_comp, :age_off]
+    keys = [:gen_off, :time_comp, :age_off, :district_off]
     subs = {}
 
     keys.each do |sim|
@@ -104,6 +149,4 @@ class MyApp < Sinatra::Base
     subs
 
   end
-
-
 end

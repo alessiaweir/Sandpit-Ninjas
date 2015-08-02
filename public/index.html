@@ -11,6 +11,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="/javascript/app.js"></script>
+    <script src="/javascript/chart-data-top-six.js"></script>
+    <script src="/javascript/chart-data-gender.js"></script>
+    <script src="/javascript/chart-data-time.js"></script>
+    <script src="/javascript/chart-age-data.js"></script>
+    <script src="/javascript/chart-data-district.js"></script>
     <script src="/javascript/bootstrap.min.js"></script>
     <script src="/javascript/ui-bootstrap-0.13.0.js"></script>
 
@@ -140,6 +145,8 @@
       <chart-data-time ng-show="showg" ng-model="crime"></chart-data-time>
       <!-- age chart -->
       <chart-age-data ng-show="showg" ng-model="crime"></chart-age-data>
+      <!-- district chart -->
+      <chart-data-district ng-show="showg" ng-model="crime"></chart-data-district>
     </div>
 
   </div>
