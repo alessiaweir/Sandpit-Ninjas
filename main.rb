@@ -8,32 +8,32 @@ class MyApp < Sinatra::Base
     send_file File.join('public', '/index.html')
   end
 
-  get '/get_locs' do
-    content_type :json
+  # get '/get_locs' do
+  #   content_type :json
 
-    locs = Location.uniq.pluck(:name)
-    age = Age.uniq.pluck(:name)
+  #   locs = Location.uniq.pluck(:name)
+  #   age = Age.uniq.pluck(:name)
 
-    {:locations => locs, :age => age}.to_json
-  end
+  #   {:locations => locs, :age => age}.to_json
+  # end
 
-  post '/post_user_info' do
-    content_type :json
+  # post '/post_user_info' do
+  #   content_type :json
 
-    json = JSON.parse(request.body.read)
+  #   json = JSON.parse(request.body.read)
     
-    location = Location.where(name: json['loc'])
-    age = Age.where(name: json['age'])
-    crimes = Crime.where(gender: json['gen'], location: location, age: age)
+  #   location = Location.where(name: json['loc'])
+  #   age = Age.where(name: json['age'])
+  #   crimes = Crime.where(gender: json['gen'], location: location, age: age)
 
-    result = []
+  #   result = []
 
-    top_six = get_top_six(crimes)
+  #   top_six = get_top_six(crimes)
 
-    sub_offs = get_sub_offinces(top_six)
+  #   sub_offs = get_sub_offinces(top_six)
 
-    {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off]), district_crime: district_crime(sub_offs[:district_off])}.to_json
-  end
+  #   {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off]), district_crime: district_crime(sub_offs[:district_off])}.to_json
+  # end
 
   # look at fixing this now
   # not_found do
