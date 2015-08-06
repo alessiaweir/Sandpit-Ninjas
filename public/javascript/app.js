@@ -49,14 +49,12 @@ app.controller('myCtrl', ['$scope', 'dataFactory', function($scope, dataFactory)
   $scope.showg = false
   $scope.loader = false
   $scope.gender = ["Male", "Female"]
+  $scope.locs = ["eastern district", "this one wont work"]
+  $scope.age = ["51 or older", "other ones"]
 
-  dataFactory.getData().then(function(data) {
+  // dataFactory.getData().then(function(data) {
     
-    $scope.locs = data.locations
-    $scope.age = data.age.sort()
-  }, function(reason) {
-    console.log('Failed: ' + reason);
-  });
+
 
   $scope.Submit = function(){
       $scope.showg = false
