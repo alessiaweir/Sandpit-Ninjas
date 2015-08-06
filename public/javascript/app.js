@@ -51,8 +51,8 @@ app.controller('myCtrl', ['$scope', 'dataFactory', function($scope, dataFactory)
   $scope.showg = false
   $scope.loader = false
   $scope.gender = ["Male", "Female"]
-  $scope.locs = ["eastern district", "this one wont work"]
-  $scope.age = ["51 or older", "other ones"]
+  $scope.locs = ["Auckland District", "Wellington District", "Canterbury District", "Tasman District", "Northland District", "Waikato District", "Eastern District", "Bay Of Plenty District", "Counties/Manukau District", "Central District", "Waitemata District", "Southern District"]
+  $scope.age = ["0 to 9", "10 to 13", "14 to 16", "17 to 20", "21 to 30", "31 to 50", "51 or Older"]
 
   // dataFactory.getData().then(function(data) {
     
