@@ -22,9 +22,11 @@ app.factory('dataFactory', ['$http', '$q', function($http, $q) {
 
     var deferred = $q.defer();
 
+    // user.loc.replace(/\s+/g, '-').toLowerCase() + "_" + user.age.replace(/\s+/g, '-').toLowerCase() + "_" + user.gen + ".json";
+
     console.log(user)
 
-    $http.get('post_user_info').
+    $http.get(user.loc.replace(/\s+/g, '-').toLowerCase() + "_" + user.age.replace(/\s+/g, '-').toLowerCase() + "_" + user.gen + ".json").
     success(function(data, status, headers, config) {
       deferred.resolve(data)
     }).
