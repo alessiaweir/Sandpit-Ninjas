@@ -24,7 +24,7 @@ app.factory('dataFactory', ['$http', '$q', function($http, $q) {
 
     console.log(user)
 
-    $http.post('post_user_info', user).
+    $http.get('post_user_info').
     success(function(data, status, headers, config) {
       deferred.resolve(data)
     }).
