@@ -64,7 +64,7 @@ app.directive('chartDataGender',
                   dataPro.push({"category": "Male", "column-1": parseInt(newValue.gender.male)})
                   dataPro.push({"category": "Female", "column-1": parseInt(newValue.gender.female)})
 
-                  console.log(dataPro)
+                  // console.log(dataPro)
 
                   initChart(dataPro);
                 }

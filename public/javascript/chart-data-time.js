@@ -82,7 +82,7 @@ app.directive('chartDataTime',
                     }
                   }
 
-                  console.log(high_year)
+                  // console.log(high_year)
 
                   neg = (parseInt(high_year.total) - parseInt(low_year.total) )
                   console.log(neg)
@@ -101,7 +101,7 @@ app.directive('chartDataTime',
                     scope.subline = 'you are ' + yearpec + " less likey to commit this crime now than in " + low_year.year
                   }
 
-                  console.log(dataPro)
+                  // console.log(dataPro)
 
                   initChart(dataPro);
                 }

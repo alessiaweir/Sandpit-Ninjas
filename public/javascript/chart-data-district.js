@@ -92,7 +92,7 @@ app.directive('chartDataDistrict',
                     dataPro.push({"location": newValue.district_crime.data[index].location, "total": parseInt(newValue.district_crime.data[index].total), "color": colors[index]})
                   }
 
-                  console.log(dataPro)
+                  // console.log(dataPro)
 
                   initChart(dataPro);
                 }

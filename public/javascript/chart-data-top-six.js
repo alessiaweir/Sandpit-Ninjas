@@ -38,7 +38,7 @@ app.directive('chartDataTopSix',
                     dataPro.push({"category": newValue.crimes[index].offence, "column-1": parseInt(newValue.crimes[index].total)})
                   }
 
-                  console.log(dataPro)
+                  // console.log(dataPro)
 
                   initChart(dataPro);
                 }

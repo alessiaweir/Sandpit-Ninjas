@@ -1,10 +1,10 @@
 require './main'
-require "sinatra/activerecord/rake" 
+# require "sinatra/activerecord/rake" 
 require 'csv'
-require './models/crime'
-require './models/location'
-require './models/offence'
-require './models/age'
+# require './models/crime'
+# require './models/location'
+# require './models/offence'
+# require './models/age'
 
 task :loaddata2014 do
   CSV.foreach('dataset.csv', :headers => true) do |row|
@@ -164,18 +164,23 @@ task :create_json do
   Location.all.each do |loc|
     Age.all.each do |age|
       ["Male", "Female"].each do |gen|
-        puts "a thing"
-        thing = {:gender => gen, :location_id => loc.id, :age_id => age.id}.to_json
-        puts thing
+        params = {:gender => gen, :location_id => loc.id, :age_id => age.id}
+        puts "start"
+        puts params
         crimes = Crime.where(gender: gen, location_id: loc[:id], age_id: age[:id])
-        next if crimes.blank? 
-        file_name = loc.name.parameterize + "_" + age.name.parameterize + "_" + gen + ".json"
-        top_six = get_top_six(crimes)
-        next if top_six.blank? 
-        sub_offs = get_sub_offinces(top_six)
-        next if sub_offs.blank? 
-        out = {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off]), district_crime: district_crime(sub_offs[:district_off])}.to_json
-        File.open(file_name, 'w') {|f| f.write(out) }
+        if !crimes.blank? 
+          file_name = loc.name.parameterize + "-" + age.name.parameterize + "-" + gen + ".json"
+          top_six = get_top_six(crimes)
+          if !top_six.blank? 
+            sub_offs = get_sub_offinces(top_six)
+            if !sub_offs.blank? 
+              puts file_name
+              out = {:crimes => top_six, :gender => gen_crime(sub_offs[:gen_off]), time_crime: time_crime(sub_offs[:time_comp]), age_crime: age_crime(sub_offs[:age_off]), district_crime: district_crime(sub_offs[:district_off]), your_gen_crime: your_gen_crime(sub_offs[:your_gen_off], params), your_age_crime: your_age_crime(sub_offs[:your_age_off], params)}.to_json
+              File.open("./public/data/#{file_name}", 'w') {|f| f.write(out) }
+            end
+          end
+        end
+        puts "end"
       end
     end
   end
@@ -200,6 +205,10 @@ end
 
   def time_crime(time_comp)
 
+    if time_comp.blank?
+      return {}
+    end
+
     time_data = []
 
     Crime.uniq.pluck(:year).each do |year|
@@ -211,6 +220,10 @@ end
   end
 
   def age_crime(age_off)
+
+    if age_off.blank?
+      return {}
+    end
 
     age_crime = Crime.where(offence_id: age_off[:id], location_id: age_off[:location][:id])
     age_groups = Age.all
@@ -244,6 +257,10 @@ end
   end
 
   def district_crime(district_off)
+    if district_off.blank?
+      return {}
+    end
+
     age_crime = Crime.where(offence_id: district_off[:id])
     locs = Location.all
     your_loc = {location: district_off[:location][:name], level: ""}
@@ -270,10 +287,73 @@ end
 
   end
 
+  def your_gen_crime(your_gen_off, params)
+    if your_gen_off.blank?
+      return {}
+    end
+
+    yo_gen_crime = Crime.where(offence_id: your_gen_off[:id] ,gender: params[:gender])
+    age_groups = Age.all
+
+    data = []
+    your_age ={gender: params[:gender], age: Age.find(params[:age_id]).name, level: ""}
+
+    age_groups.each do |group|
+      # puts "loop age: #{group.name}"
+      # puts "your age: #{Age.find(params[:age_id]).name}"
+      your_group = group.id == params[:age_id]
+      # puts "your group: #{your_group}"
+      data << {your_group: your_group, age: group.name, total: yo_gen_crime.where(age_id: group.id).count}
+    end
+
+    crime_levels = ["most","secound most","third most","average","third least", "secound least", "least"]
+
+    data2 = data.sort{ |x,y| y[:total] <=> x[:total]}
+
+    data2.each.with_index do |dats, index|
+      if (dats[:your_group])
+        your_age[:level] = crime_levels[index]
+        break
+      end
+    end
+
+    {offence: your_gen_off[:offence], offence_long_name: your_gen_off[:long_name], your_age: your_age,data: data.sort{ |x,y| x[:age] <=> y[:age]} }
+  end
+
+  def your_age_crime(your_age_off, params)
+    if your_age_off.blank?
+      return {}
+    end
+
+    yo_age_crime = Crime.where(offence_id: your_age_off[:id], location_id: params[:location_id])
+    age_groups = Age.all
+
+    data = []
+    your_age = {age: Age.find(params[:age_id]).name, level: ""}
+
+    age_groups.each do |group|
+      your_group = group.id == params[:age_id]
+      data << {your_group: your_group, age: group.name, total: yo_age_crime.where(age_id: group.id).count}
+    end
+
+    crime_levels = ["most","secound most","third most","average","third least", "secound least", "least"]
+
+    data2 = data.sort{ |x,y| y[:total] <=> x[:total]}
+
+    data2.each.with_index do |dats, index|
+      if (dats[:your_group])
+        your_age[:level] = crime_levels[index]
+        break
+      end
+    end
+
+    {offence: your_age_off[:offence], offence_long_name: your_age_off[:long_name], your_age: your_age,data: data.sort{ |x,y| x[:age] <=> y[:age]} }
+  end
+
   def get_sub_offinces(offences)
     shuffled = offences.shuffle
     off_hash = {}
-    keys = [:gen_off, :time_comp, :age_off, :district_off]
+    keys = [:gen_off, :time_comp, :age_off, :district_off, :your_gen_off, :your_age_off]
     subs = {}
 
     keys.each do |sim|

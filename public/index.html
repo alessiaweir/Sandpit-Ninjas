@@ -16,6 +16,8 @@
     <script src="/javascript/chart-data-time.js"></script>
     <script src="/javascript/chart-age-data.js"></script>
     <script src="/javascript/chart-data-district.js"></script>
+    <script src="/javascript/chart-data-your-gen.js"></script>
+    <script src="/javascript/chart-data-your-age.js"></script>
     <script src="/javascript/bootstrap.min.js"></script>
     <script src="/javascript/ui-bootstrap-0.13.0.js"></script>
 
@@ -135,18 +137,22 @@
           <img class="loading-gif" src="images/loading.gif" alt="loader">
         </div>
       </div>
-        <chart-data-top-six ng-show="showg" ng-model="crime"></chart-data-top-six>
+        <chart-data-top-six ng-show="showTopSix" ng-model="crime"></chart-data-top-six>
     </div>
     
     <div class="row">
       <!-- gender chart -->
-      <chart-data-gender ng-show="showg" ng-model="crime" user="user"></chart-data-gender>
+      <chart-data-gender ng-show="showGen" ng-model="crime" user="user"></chart-data-gender>
       <!-- time chart -->
-      <chart-data-time ng-show="showg" ng-model="crime"></chart-data-time>
+      <chart-data-time ng-show="showTime" ng-model="crime"></chart-data-time>
       <!-- age chart -->
-      <chart-age-data ng-show="showg" ng-model="crime"></chart-age-data>
+      <chart-age-data ng-show="showAge" ng-model="crime"></chart-age-data>
       <!-- district chart -->
-      <chart-data-district ng-show="showg" ng-model="crime"></chart-data-district>
+      <chart-data-district ng-show="showDist" ng-model="crime"></chart-data-district>
+      <!-- your gen chart -->
+      <chart-data-your-gen ng-show="showYourGen" ng-model="crime"></chart-data-your-gen>
+      <!-- your age chart -->
+      <chart-data-your-age ng-show="showYourAge" ng-model="crime"></chart-data-your-age>
     </div>
 
   </div>
