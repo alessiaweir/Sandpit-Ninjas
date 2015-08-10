@@ -135,9 +135,9 @@ footer {
 }
 
 .chart-card {
-	border: 2px solid #ececec;
+	border: 1px solid #777;
 	border-radius: 6px;
-	margin: 5px;
+	margin: 10px 5px;
 }
 
 .chart-card h3 {
