@@ -20,6 +20,8 @@ app.directive('chartDataTopSix',
                       "type"    : "pie",
                       "titleField"  : "category",
                       "valueField"  : "column-1",
+                      "innerRadius" : "60%",
+                      "labelRadius": 1,
                       "colors" : ["#00BCD4", "#FF9800", "#CDDC39","#9C27B0","#FFC107","#00838F","#EF6C00","#8BC34A","#7B1FA2","#E91E63"],
                       "dataProvider"  : dataPro
                     });           

@@ -88,9 +88,9 @@ app.directive('chartDataYourGen',
                   dataPro = [];
 
                   for (index = 0; index < newValue.your_gen_crime.data.length; ++index) {
-                    group_color = "#00BCD4"
+                    group_color = "#FFC107"
                     if (newValue.your_gen_crime.data[index].your_group) {
-                      group_color = "#FF9800"
+                      group_color = "#9C27B0"
                     }
                     dataPro.push({"age": newValue.your_gen_crime.data[index].age, "total": parseInt(newValue.your_gen_crime.data[index].total), "color": group_color})
                   }

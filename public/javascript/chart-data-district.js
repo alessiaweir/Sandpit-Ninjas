@@ -89,8 +89,14 @@ app.directive('chartDataDistrict',
                   dataPro = [];
 
                   for (index = 0; index < newValue.district_crime.data.length; ++index) {
-                    dataPro.push({"location": newValue.district_crime.data[index].location, "total": parseInt(newValue.district_crime.data[index].total), "color": colors[index]})
+                    group_color = "#00BCD4"
+                    if (newValue.district_crime.data[index].your_loc) {
+                      group_color = "#FFC107"
+                    }
+                    dataPro.push({"location": newValue.district_crime.data[index].location, "total": parseInt(newValue.district_crime.data[index].total), "color": group_color})
                   }
+
+                  
 
                   // console.log(dataPro)
 

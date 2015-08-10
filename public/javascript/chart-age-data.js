@@ -19,7 +19,7 @@ app.directive('chartAgeData',
                    chart = AmCharts.makeChart("crime_sheep_data_age_chart",{
                     "type": "serial",
                     "theme": "light",
-                    "colors" : ["#00838F","#EF6C00"],
+                    "colors" : ["#00BCD4", "#9C27B0"],
                     "categoryField": "year",
                     "rotate": true,
                     "startDuration": 1,
