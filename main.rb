@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'json'
-require 'sinatra/activerecord'
+# require 'sinatra/activerecord'
 
 class MyApp < Sinatra::Base
 
