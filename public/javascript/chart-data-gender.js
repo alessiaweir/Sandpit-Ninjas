@@ -26,7 +26,7 @@ app.directive('chartDataGender',
                       "titleField"  : "category",
                       "valueField"  : "column-1",
                       "innerRadius" : "60%",
-                      "labelRadius": 2,
+                      "labelRadius": 15,
                       "colors" : ["#00BCD4", "#FF9800"],
                       "dataProvider"  : dataPro
                     });           
