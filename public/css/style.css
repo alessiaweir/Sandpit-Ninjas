@@ -167,6 +167,15 @@ footer {
 	margin: 20px 0 20px 0;
 }
 
+/* ------------- CHEATY HACK ------------- */
+
+@media (max-width: 768px) {
+	.chart-overlay {
+		z-index: 1000;
+		pointer-events: none;
+	}
+}
+
 /* ==================================================
 	Page Loader
 ====================================================*/

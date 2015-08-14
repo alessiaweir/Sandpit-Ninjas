@@ -142,10 +142,13 @@
           <img class="loading-gif" src="images/loading.gif" alt="loader">
         </div>
       </div>
+      <div class="chart-overlay">
         <chart-data-top-six ng-show="showTopSix" ng-model="crime"></chart-data-top-six>
+      </div>
     </div>
     
     <div class="row">
+      <div class="chart-overlay">
       <!-- gender chart -->
       <chart-data-gender ng-show="showGen" ng-model="crime" user="user"></chart-data-gender>
       <!-- your gen chart -->
@@ -158,6 +161,7 @@
       <chart-data-district ng-show="showDist" ng-model="crime"></chart-data-district>
       <!-- your age chart -->
       <chart-data-your-age ng-show="showYourAge" ng-model="crime"></chart-data-your-age>
+      </div>
     </div>
     <div class="row" ng-show="showCtaFooter">
       <div class="col-md-offset-3 col-md-6 cta-footer">
