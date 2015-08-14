@@ -21,6 +21,7 @@ app.directive('chartDataDistrict',
                   if (chart) chart.destroy();
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_district_chart",{
+                    "panEventsEnabled": "false",
                       "type": "serial",
                       "theme": "light",
                       "dataProvider": dataPro,

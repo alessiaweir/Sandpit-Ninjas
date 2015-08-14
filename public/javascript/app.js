@@ -49,6 +49,7 @@ app.controller('myCtrl', ['$scope', 'dataFactory', function($scope, dataFactory)
   $scope.user.gen = "Male"
   $scope.cool = 0
   $scope.showTopSix = false
+  $scope.showCtaFooter = false
   $scope.showGen = false
   $scope.showTime = false
   $scope.showAge = false
@@ -72,6 +73,7 @@ app.controller('myCtrl', ['$scope', 'dataFactory', function($scope, dataFactory)
 
     dataFactory.postData($scope.user).then(function(data) {
       $scope.showTopSix = true
+      $scope.showCtaFooter = true
       $scope.showGen = !jQuery.isEmptyObject(data.gender)
       $scope.showTime = !jQuery.isEmptyObject(data.time_crime)
       $scope.showAge = !jQuery.isEmptyObject(data.age_crime)

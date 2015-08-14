@@ -19,6 +19,7 @@ app.directive('chartDataYourGen',
                   if (chart) chart.destroy();
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_your_gen_chart",{
+                     "panEventsEnabled": "false",
                       "type": "serial",
                       "theme": "light",
                       "dataProvider": dataPro,
