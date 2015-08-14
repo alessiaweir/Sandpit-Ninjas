@@ -66,6 +66,7 @@ app.controller('myCtrl', ['$scope', 'dataFactory', function($scope, dataFactory)
     $scope.showGen = false
     $scope.showTime = false
     $scope.showAge = false
+    $scope.showCtaFooter = false
     $scope.showDist = false
     $scope.showYourGen = false
     $scope.showYourAge = false
