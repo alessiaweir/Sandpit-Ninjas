@@ -23,7 +23,7 @@ app.directive('chartDataGender',
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_gender",{
                       "panelsSettings":{
-                        "panEventsEnabled": "false"
+                        "panEventsEnabled": "true"
                       },
                       "type"    : "pie",
                       "titleField"  : "category",

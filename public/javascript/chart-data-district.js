@@ -22,7 +22,7 @@ app.directive('chartDataDistrict',
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_district_chart",{
                       "panelsSettings":{
-                        "panEventsEnabled": "false"
+                        "panEventsEnabled": "true"
                       },
                       "type": "serial",
                       "theme": "light",

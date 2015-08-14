@@ -18,7 +18,7 @@ app.directive('chartAgeData',
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_age_chart",{
                     "panelsSettings":{
-                      "panEventsEnabled": "false"
+                      "panEventsEnabled": "true"
                     },
                     "type": "serial",
                     "theme": "light",

@@ -20,7 +20,7 @@ app.directive('chartDataYourAge',
                   var config = scope.config || {};
                   chart = AmCharts.makeChart("crime_sheep_data_your_age_chart",{
                       "panelsSettings":{
-                        "panEventsEnabled": "false"
+                        "panEventsEnabled": "true"
                       },
                       "type"    : "pie",
                       "titleField"  : "category",
