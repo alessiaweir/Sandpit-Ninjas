@@ -18,7 +18,7 @@ app.directive('chartDataTopSix',
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_top_six",{
                       "panelsSettings":{
-                        "panEventsEnabled": "true"
+                        "panEventsEnabled": "false"
                       },
                       "type"    : "pie",
                       "titleField"  : "category",
