@@ -20,7 +20,9 @@ app.directive('chartDataTime',
                   if (chart) chart.destroy();
                   var config = scope.config || {};
                    chart = AmCharts.makeChart("crime_sheep_data_time",{
-                      "panEventsEnabled": "false",
+                      "panelsSettings":{
+                        "panEventsEnabled": "false"
+                      },
                       "type": "serial",
                       "colors" : ["#00BCD4", "#FF9800", "#CDDC39","#9C27B0","#FFC107","#00838F","#EF6C00","#8BC34A","#7B1FA2","#E91E63"],
                       "dataProvider"  : dataPro,
